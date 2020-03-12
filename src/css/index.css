@@ -1,17 +1,20 @@
 * {
     margin: 0;
     padding: 0;
+    transition: .5s all;
 }
 
 .speedy {
     width: 100%;
+    position: fixed;
+    top: 0;
 }
 
 .speedyBar {
     width: 100%;
     background: red;
-    height: 2px;
-    /* animation: load 10s infinite linear; */
+    height: 3px;
+    animation: load 10s infinite linear;
 }
 
 .content {
@@ -26,21 +29,20 @@
     text-align: center;
 }
 
-.stepsData {
+form.controlForm {
     width: 500px;
     margin: 0 auto;
     margin-top: 50px;
     text-align: center;
 }
 
-.stepsData>span>* {
-    padding: 10px;
+.controlForm>div {
+    width: 100%;
+    padding: 5px;
 }
 
-.set {
-    margin-top: 20px;
+.controlForm>div>* {
     padding: 10px;
-    width: 100%;
 }
 
 @keyframes load {

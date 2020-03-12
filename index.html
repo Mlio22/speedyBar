@@ -18,13 +18,19 @@
         <h1 class="judul">Control Section</h1>
         <br>
 
-        <form class="stepsData" action="#">
-            <span class="setting1"> Set Berapa kali? : 
-                <input class="steps" type="number" value="0">
-                <input class="start" type="submit" value="Mulai!" onclick="start()">
-            </span>
-            <span class="settings2">
-            </span>
+        <form class="controlForm" action="#">
+            <div class="speedySetting1">
+                <span>Jumlah Set :</span>
+                <input type="number" name="speedySet" value="1">
+            </div>
+            <div class="speedySetting2">
+                <span>Lama Animasi (Milisekon) :</span>
+                <input type="number" name="speedySpeed" value="1">
+            </div>
+            <div class="triggerStartAndCounter">
+                <button class="startButton">Mulai</button>
+                <button class="counterButton" disabled="true"> counter</button>
+            </div>
         </form>
     </div>
 
