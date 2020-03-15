@@ -21,11 +21,11 @@
         <form class="controlForm" action="#">
             <div class="speedySetting1">
                 <span>Jumlah Set :</span>
-                <input type="number" name="speedySet" value="1">
+                <input type="number" name="speedySet" onchange="stop()" value="1">
             </div>
             <div class="speedySetting2">
                 <span>Lama Animasi (Milisekon) :</span>
-                <input type="number" name="speedySpeed" value="1">
+                <input type="number" name="speedySpeed" onchange="stop()" value="100">
             </div>
             <div class="triggerStartAndCounter">
                 <button class="startButton">Mulai</button>

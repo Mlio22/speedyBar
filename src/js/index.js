@@ -1,5 +1,12 @@
 // Jam Dihabiskan : 6
 function speedyFunc(wrap, bar, times, time) {
+    // untuk mematikan timeout pada fungsi forward dibawah
+    if (typeof(a) != 'undefined') {
+        clearTimeout(a);
+        bar.style.animation = 'none 0s';
+    }
+
+    // setting panjang satuan bar per step
     let one = wrap.offsetWidth / times;
 
     // menghapus style speedyKeyframes jika ada
@@ -34,21 +41,52 @@ function speedyFunc(wrap, bar, times, time) {
         width: one,
         rep: times,
         AnimateLength: time,
+
+        // membuat fungsi untuk step by step speedyBar
         forward: function() {
-            let that = this;
-            bar.style.width = that.width * this.counter + 'px';
+            this.skip();
+
+            // memulai animasi menuju setting ke counter + 1
             bar.style.animation = 'bar' + this.counter + ' ' + this.AnimateLength + 'ms';
+
+            // increment counter menjadi counter + 1
             this.counter++;
+
+            // agar variabel object ini dapat digunakan dalam timeout dibawah
+            let that = this;
+
+            // membuat timeout untuk mensetting bar ke kondisi counter + 1
             a = setTimeout(function() {
                 bar.style.animation = 'none 0s';
-                bar.style.width = that.width * that.counter + 'px';
+                if (that.counter == 0) {
+                    bar.style.width = that.width * that.rep + 'px';
+                } else {
+                    bar.style.width = that.width * that.counter + 'px';
+
+                }
             }, this.AnimateLength);
+
+            // mengembalikan nilai counter ke 0
             if (this.counter >= this.rep) {
                 this.counter = 0;
+            }
+        },
+        skip: function() {
+            let that = this;
+
+            if (typeof(a) != 'undefined') {
+                clearTimeout(a);
+                bar.style.animation = 'none 0s';
+                if (that.counter == 0) {
+                    bar.style.width = that.width * that.rep + 'px';
+                } else {
+                    bar.style.width = that.width * that.counter + 'px';
+                }
             }
         }
     };
 
+    // menciptakan variabel speedyObj
     speedyObj = Object.create(speedyObject);
 
     // inisialisasi bar awal
@@ -56,18 +94,19 @@ function speedyFunc(wrap, bar, times, time) {
     bar.style.width = '0px';
 }
 
-
+// pengenalan tombol start dan counter
 var startButton = document.getElementsByClassName('startButton'),
     counterButton = document.getElementsByClassName('counterButton');
 startButton = startButton[0];
 counterButton = counterButton[0];
 counterButton.setAttribute('disabled', true);
 
-
+// saat tombol start ditekan
 startButton.addEventListener('click', function(e) {
+    // mencegah refresh dan linking
     e.preventDefault();
-    // inisialisasi
 
+    // inisialisasi
     let speedy = document.getElementsByClassName("speedy");
     speedy = speedy[0];
 
@@ -77,16 +116,31 @@ startButton.addEventListener('click', function(e) {
     let angka = document.getElementsByName("speedySet");
     angka = angka[0].value;
 
+    c = setInterval(function() {
+        console.log(speedyBar.style.width);
+    }, 50);
+
     let waktu = document.getElementsByName("speedySpeed");
     waktu = waktu[0].value;
 
-
+    // pemanggilan fungsi
     speedyFunc(speedy, speedyBar, angka, waktu);
     counterButton.removeAttribute('disabled');
 });
 
+// saat tombol counter ditekan
 counterButton.addEventListener('click', function(e) {
     e.preventDefault();
-    speedyObj.forward();
-
+    b = setInterval(function() {
+        speedyObj.forward();
+    }, 100);
 });
+
+// jika salah satu nilai berubah maka counter akan dikunci
+// dan harus dimulai ulang lagi
+function stop() {
+    counterButton.setAttribute('disabled', true);
+    speedyObj.skip();
+    clearInterval(b);
+    clearInterval(c);
+}
