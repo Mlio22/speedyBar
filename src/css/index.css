@@ -1,7 +1,6 @@
 * {
     margin: 0;
     padding: 0;
-    transition: .5s all;
 }
 
 .speedy {
@@ -11,7 +10,7 @@
 }
 
 .speedyBar {
-    width: 100%;
+    width: 0%;
     background: red;
     height: 3px;
     animation: load 10s infinite linear;
@@ -39,10 +38,16 @@ form.controlForm {
 .controlForm>div {
     width: 100%;
     padding: 5px;
+    margin: 10px 0;
 }
 
-.controlForm>div>* {
+.controlForm>div>*,
+.controlForm>div>*>span+input {
     padding: 10px;
+}
+
+.controlForm>div>*>button {
+    padding: 5px;
 }
 
 @keyframes load {

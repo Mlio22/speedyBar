@@ -1,4 +1,7 @@
-// Jam Dihabiskan : 6
+// Jam Dihabiskan : 12
+
+'use strict';
+
 function speedyFunc(wrap, bar, times, time) {
     // untuk mematikan timeout pada fungsi forward dibawah
     if (typeof(a) != 'undefined') {
@@ -7,7 +10,7 @@ function speedyFunc(wrap, bar, times, time) {
     }
 
     // setting panjang satuan bar per step
-    let one = wrap.offsetWidth / times;
+    let percentage = ((wrap.offsetWidth / times) / wrap.offsetWidth) * 100;
 
     // menghapus style speedyKeyframes jika ada
     let style = document.getElementsByTagName('style');
@@ -22,7 +25,7 @@ function speedyFunc(wrap, bar, times, time) {
     // menambahkan keyframes baru yang akan ditambahkan sebagai stylesheet
     let keyframe = '';
     for (var i = 0; i < times; i++) {
-        data = '@keyframes bar' + i + '{0%{width : ' + one * i + 'px;} 100%{ width : ' + one * (i + 1) + 'px}}';
+        let data = '@keyframes bar' + i + '{0%{ width : ' + percentage * i + '%;} 100%{ width : ' + percentage * (i + 1) + '%}}';
         keyframe += data;
     }
 
@@ -37,20 +40,27 @@ function speedyFunc(wrap, bar, times, time) {
 
     // membuat object speedy 
     const speedyObject = {
-        counter: 0,
-        width: one,
-        rep: times,
-        AnimateLength: time,
+        counter: 0, //  current position counter
+        width: percentage, //  width unit per one counter++
+        rep: times, //  total repetition 
+        animateLength: time, //  animation length
 
         // membuat fungsi untuk step by step speedyBar
         forward: function() {
+
             this.skip();
 
+            if (this.counter >= this.rep) {
+                this.counter = 0;
+            }
+
             // memulai animasi menuju setting ke counter + 1
-            bar.style.animation = 'bar' + this.counter + ' ' + this.AnimateLength + 'ms';
+            bar.style.animation = 'bar' + this.counter + ' ' + this.animateLength + 'ms';
 
             // increment counter menjadi counter + 1
             this.counter++;
+            console.log(this.counter);
+
 
             // agar variabel object ini dapat digunakan dalam timeout dibawah
             let that = this;
@@ -58,31 +68,71 @@ function speedyFunc(wrap, bar, times, time) {
             // membuat timeout untuk mensetting bar ke kondisi counter + 1
             a = setTimeout(function() {
                 bar.style.animation = 'none 0s';
+                console.log("animation stoped");
+
                 if (that.counter == 0) {
-                    bar.style.width = that.width * that.rep + 'px';
+                    bar.style.width = that.width * that.rep + '%';
                 } else {
-                    bar.style.width = that.width * that.counter + 'px';
+                    bar.style.width = that.width * that.counter + '%';
 
                 }
-            }, this.AnimateLength);
+            }, this.animateLength);
 
             // mengembalikan nilai counter ke 0
             if (this.counter >= this.rep) {
                 this.counter = 0;
             }
         },
+        // fungsi skip
         skip: function() {
             let that = this;
 
-            if (typeof(a) != 'undefined') {
+            if (typeof(a) != 'undefined' || typeof(typeof(a)) == 'string') {
+                console.log("a deleted");
                 clearTimeout(a);
                 bar.style.animation = 'none 0s';
-                if (that.counter == 0) {
-                    bar.style.width = that.width * that.rep + 'px';
-                } else {
-                    bar.style.width = that.width * that.counter + 'px';
-                }
             }
+
+            if (that.counter == 0) {
+                bar.style.width = '0%';
+            } else {
+                bar.style.width = that.width * that.counter + '%';
+            }
+        },
+        // fungsi goPos untuk pindah ke step / posisi tertentu
+        goPos: function(toPos) {
+            let that = this;
+            if (bar.style.animationDuration != '0s') {
+                if (typeof(a) != 'undefined' || typeof(typeof(a)) == 'string') {
+                    console.log("a deleted");
+                    clearTimeout(a);
+                }
+
+                // menjadikan panjang speedyBar saat itu juga
+                // untuk memperbagus animasi
+                bar.style.webkitAnimationPlayState = 'paused';
+                bar.style.width = bar.offsetWidth.toString() + 'px';
+                bar.style.animation = 'none 0s';
+
+            }
+            bar.style.transition = 'all 500ms';
+
+            this.counter = toPos;
+
+            // menjadikan panjang dari speedybar sesuai dengan step/counter yang diinginkan
+            setTimeout(function() {
+                let width = that.width * that.counter;
+                if (width >= 100) {
+                    bar.style.width = '100%';
+                } else {
+                    bar.style.width = width + '%';
+                }
+            }, 10);
+
+            // mematikan transisi
+            b = setTimeout(function() {
+                bar.style.transition = 'none';
+            }, 500);
         }
     };
 
@@ -90,21 +140,43 @@ function speedyFunc(wrap, bar, times, time) {
     speedyObj = Object.create(speedyObject);
 
     // inisialisasi bar awal
+    bar.style.webkitAnimationPlayState = 'paused';
+    bar.style.width = bar.offsetWidth.toString() + 'px';
     bar.style.animation = 'none 0s';
-    bar.style.width = '0px';
+
+    bar.style.transition = '.5s all';
+
+    let c = setTimeout(function() {
+        bar.style.width = '0%';
+        let b = setTimeout(function() {
+            bar.style.transition = 'none';
+        }, 500);
+    }, 10);
+
+
 }
 
 // pengenalan tombol start dan counter
-var startButton = document.getElementsByClassName('startButton'),
-    counterButton = document.getElementsByClassName('counterButton');
-startButton = startButton[0];
-counterButton = counterButton[0];
+var startButton = document.getElementsByClassName('startButton')[0],
+    counterButton = document.getElementsByClassName('counterButton')[0],
+    goPosButton = document.getElementsByClassName('goPosButton')[0],
+    goPosInput = document.getElementsByName('certainPos')[0];
+var speedyObj, a, b;
+
 counterButton.setAttribute('disabled', true);
+goPosButton.setAttribute('disabled', true);
+
+document.getElementById('formulir').addEventListener('submit', function(e) {
+    console.log('diterima');
+
+});
+
 
 // saat tombol start ditekan
-startButton.addEventListener('click', function(e) {
+startButton.addEventListener('click', function(event) {
     // mencegah refresh dan linking
-    e.preventDefault();
+    event.preventDefault();
+
 
     // inisialisasi
     let speedy = document.getElementsByClassName("speedy");
@@ -113,34 +185,39 @@ startButton.addEventListener('click', function(e) {
     let speedyBar = document.getElementsByClassName("speedyBar");
     speedyBar = speedyBar[0];
 
-    let angka = document.getElementsByName("speedySet");
+    let angka = document.getElementsByName("totalSet");
     angka = angka[0].value;
 
-    c = setInterval(function() {
-        console.log(speedyBar.style.width);
-    }, 50);
-
-    let waktu = document.getElementsByName("speedySpeed");
+    let waktu = document.getElementsByName("totalTime");
     waktu = waktu[0].value;
 
     // pemanggilan fungsi
     speedyFunc(speedy, speedyBar, angka, waktu);
     counterButton.removeAttribute('disabled');
+    goPosButton.removeAttribute('disabled');
+    goPosInput.setAttribute('max', angka);
+
 });
 
 // saat tombol counter ditekan
 counterButton.addEventListener('click', function(e) {
     e.preventDefault();
-    b = setInterval(function() {
-        speedyObj.forward();
-    }, 100);
+    speedyObj.forward();
 });
+
+goPosButton.addEventListener('click', function(e) {
+    e.preventDefault();
+    speedyObj.goPos(goPosInput.value);
+
+});
+
 
 // jika salah satu nilai berubah maka counter akan dikunci
 // dan harus dimulai ulang lagi
 function stop() {
     counterButton.setAttribute('disabled', true);
-    speedyObj.skip();
-    clearInterval(b);
-    clearInterval(c);
+    goPosButton.setAttribute('disabled', true);
+    if (typeof(speedyObj) != 'undefined') {
+        speedyObj.skip();
+    }
 }
