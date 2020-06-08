@@ -57,7 +57,7 @@ speedyBar.step();
 this is the one-step function for animate the bar from n-1 to n
 if the bar reaches it max width it'll start from 0, again
 
-### towards to a certain point
+#### towards to a certain point
 ```javascript
 speedyObj.goPos(5); // must integer and not higher than times that was set
 ```
