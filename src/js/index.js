@@ -93,6 +93,7 @@ function speedyFunc(wrap, bar, times, time) {
                 bar.style.animation = 'none 0s';
             }
 
+            // menyesuaikan panjang bar
             if (that.counter == 0) {
                 bar.style.width = '0%';
             } else {
@@ -156,6 +157,7 @@ function speedyFunc(wrap, bar, times, time) {
 
 }
 
+//! Program mulai dari sini
 // pengenalan tombol start dan counter
 var startButton = document.getElementsByClassName('startButton')[0],
     counterButton = document.getElementsByClassName('counterButton')[0],
@@ -166,17 +168,10 @@ var speedyObj, a, b;
 counterButton.setAttribute('disabled', true);
 goPosButton.setAttribute('disabled', true);
 
-document.getElementById('formulir').addEventListener('submit', function(e) {
-    console.log('diterima');
-
-});
-
-
 // saat tombol start ditekan
 startButton.addEventListener('click', function(event) {
     // mencegah refresh dan linking
     event.preventDefault();
-
 
     // inisialisasi
     let speedy = document.getElementsByClassName("speedy");
@@ -193,8 +188,10 @@ startButton.addEventListener('click', function(event) {
 
     // pemanggilan fungsi
     speedyFunc(speedy, speedyBar, angka, waktu);
+    // mengaktifkan tombol counter dan goPos
     counterButton.removeAttribute('disabled');
     goPosButton.removeAttribute('disabled');
+    // setting angka maksimal input goPos
     goPosInput.setAttribute('max', angka);
 
 });
@@ -205,10 +202,10 @@ counterButton.addEventListener('click', function(e) {
     speedyObj.forward();
 });
 
+// saat tombol goPos ditekan
 goPosButton.addEventListener('click', function(e) {
     e.preventDefault();
     speedyObj.goPos(goPosInput.value);
-
 });
 
 
