@@ -14,8 +14,10 @@ startButton.addEventListener("click", (e) => {
     let waktu = document.getElementsByName("totalTime");
     waktu = waktu[0].value;
 
-    speedybar.percent = angka;
-    speedybar.duration = waktu;
+    speedybar.init = {
+        times: angka,
+        duration: waktu
+    };
 
     counterButton.removeAttribute('disabled');
     goPosInput.setAttribute('max', angka);

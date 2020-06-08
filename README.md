@@ -2,38 +2,63 @@
 
 ## How to Use
 
-### Initiation
-```javascript
-  speedyFunc(speedy, speedyBar, total, length);
+### Copy and Paste
+Create an speedyBar element on your template
+
+```html
+  <div class="speedyWrapper">
+    <speedy-bar></speedy-bar>
+  </div>
 ```
 
-explanation : 
-1. speedy   :   a bar that those length will be changed
-2. speedyBar:   the wrap of speedy(at no.1) that gives the full width of the speedy(no.1)
-3. total    :   specifies the total amount of animation
-4. length   :   specifies how long the animation is running (in milliseconds)
+put some styling on both elements, example:
+```css
+  .speedyWrapper {
+    width: 100%;
+    position: fixed;
+    top: 0;
+}
 
-this function creates an object named **speedyObj** which will used afterwards
+speedy-bar {
+    display: inherit;
+    width: 0%;
+    background: red;
+    height: 3px;
+    transition: .5s all;
+}
+```
+you can customize the color or the width, ANYTHING!.
 
-### Counter
+and put this on your javascript file
 ```javascript
-  speedyObj.forward();
+  const speedyBar = document.getElementsByTagName ("speedy-bar")[0];
+  // [0] can be [1], [2], etc as you want
+```
+
+### Initializing
+You need to set some settings at first use
+just put those line on your javascript file
+
+```javascript
+  speedybar.init = {
+    times: 3,         //  how many steps do you use 
+    duration: 500   //  how long the duration step-to-step (in ms)
+  };
+```
+
+### Features
+
+#### Counter (Step)
+```javascript
+  speedyBar.step();
 ```
 
 this is the one-step function for animate the bar from n-1 to n
 if the bar reaches it max width it'll start from 0, again
 
-### Skiping animation
-```javascript
-  speedyObj.skip();
-```
-
-this function used for skip the animation of the forward() function
-and sets the width of the bar to n width
-
 ### towards to a certain point
 ```javascript
-  speedyObj.goPos(toPos);
-  // toPos is the point to go (must integer)
+  speedyObj.goPos(5); // must integer and not higher than times that was set
 ```
 
+That's All.

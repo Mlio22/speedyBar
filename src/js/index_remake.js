@@ -1,4 +1,4 @@
-// jam dihabiskan : 1
+// jam dihabiskan : 3
 
 //! remake ini menggunakan konsep custom element (ES6)
 
@@ -7,15 +7,20 @@ class SpeedyBar extends HTMLElement {
         super();
         this.percentage = 100;
         this.counter = 0;
-        this.max = 0;
+        this.max = 1;
         this.parentWidth = this.parentElement.offsetWidth;
+    }
+
+    set init(initialObj) {
+        this.percent(initialObj.times);
+        this.duration(initialObj.duration);
     }
 
     setZeroWidth() {
         this.style.width = '0px';
     }
 
-    set percent(times) {
+    percent(times = 1) {
         this.percentage = (this.parentWidth / times) / this.parentWidth * 100;
         this.max = times;
         this.counter = 0;
@@ -23,7 +28,7 @@ class SpeedyBar extends HTMLElement {
         // console.log(this);
     }
 
-    set duration(ms) {
+    duration(ms = 500) {
         this.style.transition = `${ms}ms all`;
     }
 

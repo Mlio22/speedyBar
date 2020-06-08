@@ -3,17 +3,19 @@
     padding: 0;
 }
 
-.speedy {
+.speedyWrapper {
     width: 100%;
     position: fixed;
     top: 0;
 }
 
-.speedyBar {
+speedy-bar {
+    display: inherit;
     width: 0%;
     background: red;
     height: 3px;
-    animation: load 10s infinite linear;
+    transition: .5s all;
+    /* animation: load 10s infinite linear; */
 }
 
 .content {
